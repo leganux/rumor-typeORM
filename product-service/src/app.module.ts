@@ -2,19 +2,14 @@ import {Module} from '@nestjs/common';
 import {TypeOrmModule} from '@nestjs/typeorm';
 
 
-
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
-//import {ProductsModule} from './products/products.module';
-
-
 import {ServeStaticModule} from '@nestjs/serve-static';
-
 import {join} from 'path';
 import {UserModule} from './user/user.module';
-import { EventModule } from './event/event.module';
-import { GuestModule } from './guest/guest.module';
-import { InviteRequestModule } from './invite-request/invite-request.module';
+import {EventModule} from './event/event.module';
+import {GuestModule} from './guest/guest.module';
+import {InviteRequestModule} from './invite-request/invite-request.module';
 import ormconfig from './ormconfig';
 
 
@@ -28,7 +23,7 @@ import ormconfig from './ormconfig';
         EventModule,
         GuestModule,
         InviteRequestModule,
-        //ProductsModule,
+
     ],
     controllers: [AppController],
     providers: [AppService],

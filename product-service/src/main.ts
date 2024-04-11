@@ -1,7 +1,7 @@
 import {NestFactory} from '@nestjs/core';
 import {AppModule} from './app.module';
 
-import {ProductsModule} from './products/products.module';
+import {UserModule} from './user/user.module';
 import {MicroserviceOptions, Transport} from '@nestjs/microservices';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
@@ -16,10 +16,11 @@ async function bootstrap() {
         console.log('error en proccess')
     }
     const app = await NestFactory.create(AppModule);
-    const app_ = await NestFactory.create(ProductsModule);
+    await app.listen(process.env.PORT_API || 3007);
 
-    const protofile = path.join(__dirname, '..', 'public', 'product.proto')
 
+    const app_user = await NestFactory.create(UserModule);
+    const protofile_user = path.join(__dirname, '..', 'public', 'user.proto')
 
     let uri_grpc = 'product_service:'
     if (process.env.ENVIRONMENT == 'develop') {
@@ -28,23 +29,17 @@ async function bootstrap() {
     uri_grpc = uri_grpc + (process.env.PORT_GRCP || 50057)
 
 
-
-
-    const grpcOptions: MicroserviceOptions = {
+    const grpcOptions_user: MicroserviceOptions = {
         transport: Transport.GRPC,
         options: {
             url: uri_grpc,
-            package: 'product', // Nombre de tu paquete gRPC
-            protoPath: protofile, // Ruta a tu archivo proto
+            package: 'user',
+            protoPath: protofile_user,
         },
     };
 
-    app_.connectMicroservice(grpcOptions);
-    await app_.startAllMicroservices();
-
-
-
-    await app.listen(process.env.PORT_API || 3007);
+    app_user.connectMicroservice(grpcOptions_user);
+    await app_user.startAllMicroservices();
 
 
 }
