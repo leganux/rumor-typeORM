@@ -23,7 +23,6 @@ export class Event {
     @OneToMany(() => Guest, guest => guest.event)
     guests: Guest[];
 
-    // Definir relación con la entidad InviteRequest para las solicitudes de invitación asociadas al evento
     @OneToMany(() => InviteRequest, inviteRequest => inviteRequest.event)
     inviteRequests: InviteRequest[];
 }

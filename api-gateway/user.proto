@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package user;
+option go_package = "./user";
+message User {
+    optional string id = 1;
+    string name = 2;
+    string email = 3;
+    string date_of_birth = 4;
+}
+
+service UserService {
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+    rpc FindAllUsers (FindAllUsersRequest) returns (FindAllUsersResponse);
+    rpc FindUserById (FindUserByIdRequest) returns (FindUserByIdResponse);
+    rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse);
+    rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse);
+}
+
+message FindAllUsersRequest {}
+
+message FindAllUsersResponse {
+    repeated User users = 1;
+}
+
+message CreateUserRequest {
+    string name = 1;
+    string email = 2;
+    string date_of_birth = 3;
+}
+
+message CreateUserResponse {
+    optional string id = 1;
+    string name = 2;
+    string email = 3;
+    string date_of_birth = 4;
+}
+
+
+message FindUserByIdRequest {
+    string id = 1;
+}
+
+message FindUserByIdResponse {
+    optional string id = 1;
+    string name = 2;
+    string email = 3;
+    string date_of_birth = 4;
+}
+
+message UpdateUserRequest {
+    string id = 1;
+    string name = 2;
+    string email = 3;
+    string date_of_birth = 4;
+}
+
+message UpdateUserResponse {
+    optional string id = 1;
+    string name = 2;
+    string email = 3;
+    string date_of_birth = 4;
+}
+
+message DeleteUserRequest {
+    string id = 1;
+}
+
+message DeleteUserResponse {
+    optional string id = 1;
+    string name = 2;
+    string email = 3;
+    string date_of_birth = 4;
+}

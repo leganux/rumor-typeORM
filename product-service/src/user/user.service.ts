@@ -8,10 +8,14 @@ import {UpdateUserDto} from "./dto/update-user.dto";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {
     CreateUserRequest,
-    CreateUserResponse, DeleteUserResponse,
+    CreateUserResponse,
+    DeleteUserResponse,
     FindAllUsersRequest,
     FindAllUsersResponse,
-    FindUserByIdRequest, FindUserByIdResponse, UpdateUserRequest, UpdateUserResponse
+    FindUserByIdRequest,
+    FindUserByIdResponse,
+    UpdateUserRequest,
+    UpdateUserResponse
 } from "../generated/user";
 
 @Injectable()

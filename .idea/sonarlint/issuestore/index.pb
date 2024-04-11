@@ -49,3 +49,21 @@ k
 ;product-service/src/invite-request/invite-request.entity.ts,b/a/ba8649c29baa6783a6f4cc73bd903aa49d0a16ef
 l
 <product-service/src/invite-request/invite-request.service.ts,2/b/2b1ce7d54772bb0e98a823fed2990b268bd41f57
+S
+#product-service/src/products/dto.ts,d/8/d8caf54f828729fe132ce85f0e2ec5daeea4a63d
+`
+0product-service/src/products/products.service.ts,b/4/b486dd325697140e2971cf5f547eda0ef1d3461c
+_
+/product-service/src/products/products.module.ts,d/f/dfbfe570c06b771083946dc5376a2a904824b2d1
+S
+#grpc-protocols/generated/user_pb.js,0/b/0b23317d598cb5ebabdb4ac9515b0c3e20bd3a38
+P
+ grpc-protocols/generated/user.ts,5/b/5b429fad08b3fb14daa98540261b7cd7a6857cd8
+c
+3product-service/src/products/products.controller.ts,1/d/1d168e0c4aae590e3990bc4705314ade59d8481b
+I
+grpc-protocols/user.proto,1/d/1dd2fb57dd87488385e2514d87e5e5fc7ef95ebe
+U
+%product-service/src/generated/user.ts,5/2/52627fc7973b69ea9256911b19926c084ca9e572
+Q
+!product-service/public/user.proto,2/4/24e8cf55ad5bb8e765c212782f85cfecba89f833

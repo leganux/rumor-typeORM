@@ -9,8 +9,8 @@ import (
 	"os"
 	"time"
 
-	orderpb "api-gateway/generated/order"
 	productpb "api-gateway/generated/product"
+	userpb "api-gateway/generated/user"
 	jwt "github.com/dgrijalva/jwt-go"
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
@@ -19,10 +19,11 @@ import (
 )
 
 // Client connections to gRPC services
-var orderClient orderpb.OrderServiceClient
+
 var productClient productpb.ProductServiceClient
-var orderServiceAddress = "order_service:50052"
+var userClient userpb.UserServiceClient
 var productServiceAddress = "product_service:50057"
+var userServiceAddress = "user_service:50058"
 var rumorSecretKey = "rumor_secret_key"
 var rumorUser = "admin"
 var rumorPassword = "Kt3RickS0n"
@@ -34,12 +35,6 @@ type User struct {
 
 // Initialize gRPC clients
 func init() {
-	// Create gRPC client connections with insecure credentials
-	orderConn, err := grpc.NewClient(orderServiceAddress, grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("Failed to create client connection for order server: %v", err)
-	}
-	//defer orderConn.Close()
 
 	productConn, err := grpc.NewClient(productServiceAddress, grpc.WithInsecure())
 	if err != nil {
@@ -47,9 +42,13 @@ func init() {
 	}
 	//defer productConn.Close()
 
-	// Create clients from the connections
-	orderClient = orderpb.NewOrderServiceClient(orderConn)
 	productClient = productpb.NewProductServiceClient(productConn)
+
+	userConn, err := grpc.Dial(userServiceAddress, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to create client connection for user server: %v", err)
+	}
+	userClient = userpb.NewUserServiceClient(userConn)
 }
 
 func sendResponse(w http.ResponseWriter, status int, data interface{}, err error, message string) {
@@ -181,55 +180,76 @@ func getAllProductsHandler(w http.ResponseWriter, r *http.Request) {
 	sendResponse(w, http.StatusOK, response, nil, "OK")
 }
 
-func createOrderHandler(w http.ResponseWriter, r *http.Request) {
+// user
+
+func createUserHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		sendResponse(w, http.StatusMethodNotAllowed, nil, nil, "Method not allowed")
 		return
 	}
 
-	var request orderpb.CreateOrderRequest
+	var request userpb.CreateUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		sendResponse(w, http.StatusBadRequest, nil, err, "Invalid request body")
 		return
 	}
 
-	response, err := orderClient.CreateOrder(context.Background(), &request)
+	response, err := userClient.CreateUser(context.Background(), &request)
 	if err != nil {
-		sendResponse(w, http.StatusInternalServerError, nil, err, "Error creating order")
+		sendResponse(w, http.StatusInternalServerError, nil, err, "Error creating user")
 		return
 	}
-
-	requestJSON, err := json.Marshal(request)
-	if err != nil {
-		// Handle error if unable to marshal request to JSON
-		sendResponse(w, http.StatusInternalServerError, nil, err, "Error marshaling request JSON")
-		return
-	}
-	fmt.Println("Request body JSON:", string(requestJSON))
 
 	sendResponse(w, http.StatusOK, response, nil, "OK")
 }
-func updateOrderHandler(w http.ResponseWriter, r *http.Request) {
+
+func getUserByIdHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		sendResponse(w, http.StatusMethodNotAllowed, nil, nil, "Method not allowed")
+		return
+	}
+
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		sendResponse(w, http.StatusBadRequest, nil, nil, "Missing user ID")
+		return
+	}
+
+	request := &userpb.FindUserByIdRequest{
+		Id: id,
+	}
+
+	response, err := userClient.FindUserById(context.Background(), request)
+	if err != nil {
+		sendResponse(w, http.StatusInternalServerError, nil, err, "Error retrieving user")
+		return
+	}
+
+	sendResponse(w, http.StatusOK, response, nil, "OK")
+}
+
+func updateUserHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		sendResponse(w, http.StatusMethodNotAllowed, nil, nil, "Method not allowed")
 		return
 	}
 
-	var request orderpb.UpdateOrderRequest
+	var request userpb.UpdateUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		sendResponse(w, http.StatusBadRequest, nil, err, "Invalid request body")
 		return
 	}
 
-	response, err := orderClient.UpdateOrder(context.Background(), &request)
+	response, err := userClient.UpdateUser(context.Background(), &request)
 	if err != nil {
-		sendResponse(w, http.StatusInternalServerError, nil, err, "Error updating order")
+		sendResponse(w, http.StatusInternalServerError, nil, err, "Error updating user")
 		return
 	}
 
 	sendResponse(w, http.StatusOK, response, nil, "OK")
 }
-func deleteOrderHandler(w http.ResponseWriter, r *http.Request) {
+
+func deleteUserHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		sendResponse(w, http.StatusMethodNotAllowed, nil, nil, "Method not allowed")
 		return
@@ -237,33 +257,34 @@ func deleteOrderHandler(w http.ResponseWriter, r *http.Request) {
 
 	id := r.URL.Query().Get("id")
 	if id == "" {
-		sendResponse(w, http.StatusBadRequest, nil, nil, "Missing order ID")
+		sendResponse(w, http.StatusBadRequest, nil, nil, "Missing user ID")
 		return
 	}
 
-	request := &orderpb.DeleteOrderRequest{
+	request := &userpb.DeleteUserRequest{
 		Id: id,
 	}
 
-	response, err := orderClient.DeleteOrder(context.Background(), request)
+	response, err := userClient.DeleteUser(context.Background(), request)
 	if err != nil {
-		sendResponse(w, http.StatusInternalServerError, nil, err, "Error deleting order")
+		sendResponse(w, http.StatusInternalServerError, nil, err, "Error deleting user")
 		return
 	}
 
 	sendResponse(w, http.StatusOK, response, nil, "OK")
 }
-func getAllOrdersHandler(w http.ResponseWriter, r *http.Request) {
+
+func getAllUsersHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		sendResponse(w, http.StatusMethodNotAllowed, nil, nil, "Method not allowed")
 		return
 	}
 
-	request := &orderpb.FindAllOrdersRequest{}
+	request := &userpb.FindAllUsersRequest{}
 
-	response, err := orderClient.FindAllOrders(context.Background(), request)
+	response, err := userClient.FindAllUsers(context.Background(), request)
 	if err != nil {
-		sendResponse(w, http.StatusInternalServerError, nil, err, "Error retrieving orders")
+		sendResponse(w, http.StatusInternalServerError, nil, err, "Error retrieving users")
 		return
 	}
 
@@ -384,8 +405,8 @@ func main() {
 	password := os.Getenv("AUTH_PASSWORD")
 
 	if env == "develop" {
-		orderServiceAddress = "localhost:50052"
 		productServiceAddress = "localhost:50057"
+		userServiceAddress = "localhost:50057"
 	}
 	if secret_key != "" {
 		rumorSecretKey = secret_key
@@ -396,21 +417,22 @@ func main() {
 	if password != "" {
 		rumorPassword = password
 	}
-	fmt.Printf("orderservice =  %s  productService = %s ", orderServiceAddress, productServiceAddress)
 
 	router := mux.NewRouter()
 	router.HandleFunc("/login", loginHandler).Methods("POST")
-
-	router.HandleFunc("/api/orders", getAllOrdersHandler).Methods("GET")
-	router.HandleFunc("/api/orders/create", createOrderHandler).Methods("POST")
-	router.HandleFunc("/api/orders/update", updateOrderHandler).Methods("PUT")
-	router.HandleFunc("/api/orders/delete", deleteOrderHandler).Methods("DELETE")
 
 	router.HandleFunc("/api/products", getAllProductsHandler).Methods("GET")
 	router.HandleFunc("/api/products/create", createProductHandler).Methods("POST")
 	router.HandleFunc("/api/products/get", getProductByIdHandler).Methods("GET")
 	router.HandleFunc("/api/products/update", updateProductHandler).Methods("PUT")
 	router.HandleFunc("/api/products/delete", deleteProductHandler).Methods("DELETE")
+
+	router.HandleFunc("/api/users", getAllUsersHandler).Methods("GET")
+	router.HandleFunc("/api/users/create", createUserHandler).Methods("POST")
+	router.HandleFunc("/api/users/get", getUserByIdHandler).Methods("GET")
+	router.HandleFunc("/api/users/update", updateUserHandler).Methods("PUT")
+	router.HandleFunc("/api/users/delete", deleteUserHandler).Methods("DELETE")
+
 	router.HandleFunc("/", indexHandler).Methods("GET")
 
 	// Use el middleware para validar el token JWT
