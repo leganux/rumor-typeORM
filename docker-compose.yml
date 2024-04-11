@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  postgres:
+    image: "postgres:14"
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=1234567890
+      - POSTGRES_DB=rumor
+    ports:
+      - "9001:5432"
+    networks:
+      - rumor
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+  product_service:
+    build: ./product-service
+    ports:
+      - "50057:50057"
+      - "3007:3007"
+    networks:
+      - rumor
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3007" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      start_interval: 5s
+    restart: always
+
+  api_gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - rumor
+    depends_on:
+
+      product_service:
+        condition: service_started
+    restart: always
+
+volumes:
+  pgdata:
+    name: postgres-data
+    driver: local
+
+
+
+networks:
+  rumor:
+    driver: bridge
