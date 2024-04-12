@@ -24,7 +24,7 @@ export class UserController {
     constructor(private readonly userService: UserService) {
     }
 
-    /*
+
         @Get()
         findAll(): Promise<User[]> {
             return this.userService.findAll();
@@ -49,7 +49,7 @@ export class UserController {
         remove(@Param('id') id: string): Promise<void> {
             return this.userService.remove(id);
         }
-    */
+
 
     // GRPC communication
 

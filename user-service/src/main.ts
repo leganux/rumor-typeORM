@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
+import process from "process";
 
 async function bootstrap(): Promise<void> {
     try {
@@ -12,6 +13,7 @@ async function bootstrap(): Promise<void> {
     }
 
     const app = await NestFactory.create(AppModule);
+
 
     // Configuración y conexión del microservicio gRPC dentro de AppModule
     const protofileUser = path.join(__dirname, '..', 'public', 'user.proto');
@@ -39,3 +41,4 @@ async function bootstrap(): Promise<void> {
 }
 
 bootstrap();
+
