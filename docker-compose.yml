@@ -16,8 +16,8 @@ services:
       - pgdata:/var/lib/postgresql/data
 
 
-  product_service:
-    build: ./product-service
+  user_service:
+    build: ./user-service
     ports:
       - "50057:50057"
       - "3007:3007"
@@ -32,6 +32,54 @@ services:
       start_interval: 5s
     restart: always
 
+  invite_request_service:
+    build: ./invite-request-service
+    ports:
+      - "50060:50060"
+      - "3008:3008"
+    networks:
+      - rumor
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3008" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      start_interval: 5s
+    restart: always
+
+  guest_service:
+    build: ./guest-service
+    ports:
+      - "50059:50059"
+      - "3009:3009"
+    networks:
+      - rumor
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3009" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      start_interval: 5s
+    restart: always
+
+  event_service:
+    build: ./event-service
+    ports:
+      - "50058:50058"
+      - "3010:3010"
+    networks:
+      - rumor
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3010" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      start_interval: 5s
+    restart: always
+
   api_gateway:
     build: ./api-gateway
     ports:
@@ -39,18 +87,21 @@ services:
     networks:
       - rumor
     depends_on:
-
-      product_service:
+      user_service:
         condition: service_started
+      guest_service:
+        condition: service_started
+      invite_request_service:
+        condition: service_started
+      event_service:
+        condition: service_started
+
     restart: always
 
 volumes:
   pgdata:
     name: postgres-data
     driver: local
-
-
-
 networks:
   rumor:
     driver: bridge

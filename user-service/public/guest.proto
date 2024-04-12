@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package guest;
+
+message Guest {
+    string id = 1;
+    Event event = 2;
+    User user = 3;
+}
+
+message Event {
+    optional string id = 1;
+    string title = 2;
+    string description = 3;
+    string start_time = 4;
+    string end_time = 5;
+    repeated Guest guests = 6;
+    repeated InviteRequest invite_request = 7;
+}
+
+
+
+message User {
+    optional string id = 1;
+    string name = 2;
+    string email = 3;
+    string date_of_birth = 4;
+}
+
+message InviteRequest {
+    string id = 1;
+    string sender_id = 2;
+    string receiver_id = 3;
+}
+
+service GuestService {
+    rpc CreateGuest (CreateGuestRequest) returns (CreateGuestResponse);
+    rpc FindAllGuests (FindAllGuestsRequest) returns (FindAllGuestsResponse);
+    rpc FindGuestById (FindGuestByIdRequest) returns (FindGuestByIdResponse);
+    rpc UpdateGuest (UpdateGuestRequest) returns (UpdateGuestResponse);
+    rpc DeleteGuest (DeleteGuestRequest) returns (DeleteGuestResponse);
+}
+
+message FindAllGuestsRequest {}
+
+message FindAllGuestsResponse {
+    repeated Guest guests = 1;
+}
+
+message CreateGuestRequest {
+
+    optional string id = 1;
+    Event event = 2;
+    User user = 3;
+
+}
+
+message CreateGuestResponse {
+    optional string id = 1;
+    Event event = 2;
+    User user = 3;
+
+}
+
+
+message FindGuestByIdRequest {
+    string id = 1;
+}
+
+message FindGuestByIdResponse {
+    optional string id = 1;
+    Event event = 2;
+    User user = 3;
+
+}
+
+message UpdateGuestRequest {
+    optional string id = 1;
+    Event event = 2;
+    User user = 3;
+
+}
+
+message UpdateGuestResponse {
+    optional string id = 1;
+    Event event = 2;
+    User user = 3;
+
+}
+
+message DeleteGuestRequest {
+    string id = 1;
+}
+
+message DeleteGuestResponse {
+    optional string id = 1;
+    Event event = 2;
+    User user = 3;
+
+}
