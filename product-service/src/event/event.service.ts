@@ -15,7 +15,7 @@ import {
     FindEventByIdResponse,
     UpdateEventRequest,
     UpdateEventResponse,
-    Guest
+    Guest, DeleteEventRequest
 } from "../generated/event";
 
 @Injectable()
@@ -127,7 +127,7 @@ export class EventService {
         };
     }
 
-    async deleteEventGRPC(data: DeleteEventResponse): Promise<DeleteEventResponse> {
+    async deleteEventGRPC(data: DeleteEventRequest): Promise<DeleteEventResponse> {
         let savedEvent = await this.eventRepository.findOneBy({id: data.id});
         const guests: any = savedEvent.guests ? savedEvent.guests.map(guest => ({id: guest.id})) : [];
         const inviteRequests: any = savedEvent.inviteRequests ? savedEvent.inviteRequests.map(request => ({id: request.id})) : [];

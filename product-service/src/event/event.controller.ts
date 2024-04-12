@@ -5,10 +5,15 @@ import {Event} from './event.entity';
 import {GrpcMethod} from "@nestjs/microservices";
 import {
     CreateEventRequest,
-    CreateEventResponse, DeleteEventResponse,
+    CreateEventResponse,
+    DeleteEventRequest,
+    DeleteEventResponse,
     FindAllEventsRequest,
     FindAllEventsResponse,
-    FindEventByIdRequest, FindEventByIdResponse, UpdateEventRequest, UpdateEventResponse
+    FindEventByIdRequest,
+    FindEventByIdResponse,
+    UpdateEventRequest,
+    UpdateEventResponse
 } from "../generated/event";
 
 @Controller('events')
@@ -64,7 +69,7 @@ export class EventController {
     }
 
     @GrpcMethod('EventService', 'DeleteEvent')
-    async deleteEvent(data: DeleteEventResponse): Promise<DeleteEventResponse> {
+    async deleteEvent(data: DeleteEventRequest): Promise<DeleteEventResponse> {
         return await this.eventService.deleteEventGRPC(data);
     }
 }

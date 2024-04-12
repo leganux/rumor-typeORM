@@ -67,3 +67,5 @@ I
 grpc-protocols/user.proto,1/d/1dd2fb57dd87488385e2514d87e5e5fc7ef95ebe
 Q
 !product-service/public/user.proto,2/4/24e8cf55ad5bb8e765c212782f85cfecba89f833
+J
+grpc-protocols/event.proto,9/3/93e5a1a1efe5f0f1fab538f0a5d42af0b9c32f48

@@ -67,3 +67,5 @@ U
 %product-service/src/generated/user.ts,5/2/52627fc7973b69ea9256911b19926c084ca9e572
 Q
 !product-service/public/user.proto,2/4/24e8cf55ad5bb8e765c212782f85cfecba89f833
+J
+grpc-protocols/event.proto,9/3/93e5a1a1efe5f0f1fab538f0a5d42af0b9c32f48
