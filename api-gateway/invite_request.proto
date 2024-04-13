@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+package invite_request;
+option go_package = "./invite_request";
+message InviteRequest {
+    string id = 1;
+    User requester = 2;
+    User invited_user = 3;
+    Event event = 4;
+    string status = 5;
+    string created_at = 6;
+    optional string updated_at = 7;
+}
+
+message Guest {
+    string id = 1;
+    Event event = 2;
+    User user = 3;
+}
+
+message Event {
+    optional string id = 1;
+    string title = 2;
+    string description = 3;
+    string start_time = 4;
+    string end_time = 5;
+    repeated Guest guests = 6;
+    repeated InviteRequest invite_request = 7;
+}
+
+
+
+message User {
+    optional string id = 1;
+    string name = 2;
+    string email = 3;
+    string date_of_birth = 4;
+}
+
+
+
+service InviteRequestService {
+    rpc CreateInviteRequest (CreateInviteRequestRequest) returns (CreateInviteRequestResponse);
+    rpc FindAllInviteRequests (FindAllInviteRequestsRequest) returns (FindAllInviteRequestsResponse);
+    rpc FindInviteRequestById (FindInviteRequestByIdRequest) returns (FindInviteRequestByIdResponse);
+    rpc UpdateInviteRequest (UpdateInviteRequestRequest) returns (UpdateInviteRequestResponse);
+    rpc DeleteInviteRequest (DeleteInviteRequestRequest) returns (DeleteInviteRequestResponse);
+}
+
+message FindAllInviteRequestsRequest {}
+
+message FindAllInviteRequestsResponse {
+    repeated InviteRequest invite_requests = 1;
+}
+
+message CreateInviteRequestRequest {
+    optional string id = 1;
+    User requester = 2;
+    User invited_user = 3;
+    Event event = 4;
+    string status = 5;
+    string created_at = 6;
+    optional string updated_at = 7;
+}
+
+message CreateInviteRequestResponse {
+    optional string id = 1;
+    User requester = 2;
+    User invited_user = 3;
+    Event event = 4;
+    string status = 5;
+    string created_at = 6;
+    optional string updated_at = 7;
+
+}
+
+
+message FindInviteRequestByIdRequest {
+    string id = 1;
+}
+
+message FindInviteRequestByIdResponse {
+    optional string id = 1;
+    User requester = 2;
+    User invited_user = 3;
+    Event event = 4;
+    string status = 5;
+    string created_at = 6;
+    optional string updated_at = 7;
+}
+
+message UpdateInviteRequestRequest {
+    optional string id = 1;
+    User requester = 2;
+    User invited_user = 3;
+    Event event = 4;
+    string status = 5;
+    string created_at = 6;
+    optional string updated_at = 7;
+
+}
+
+message UpdateInviteRequestResponse {
+    optional string id = 1;
+    User requester = 2;
+    User invited_user = 3;
+    Event event = 4;
+    string status = 5;
+    string created_at = 6;
+    optional string updated_at = 7;
+
+}
+
+message DeleteInviteRequestRequest {
+    string id = 1;
+}
+
+message DeleteInviteRequestResponse {
+    optional string id = 1;
+    User requester = 2;
+    User invited_user = 3;
+    Event event = 4;
+    string status = 5;
+    string created_at = 6;
+    optional string updated_at = 7;
+
+}

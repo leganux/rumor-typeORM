@@ -4,7 +4,7 @@ import {AppModule} from './app.module';
 import {MicroserviceOptions, Transport} from '@nestjs/microservices';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
-import * as process from "process";
+
 
 
 async function bootstrap(): Promise<void> {

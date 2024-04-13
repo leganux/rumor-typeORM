@@ -16,7 +16,7 @@ import {
     UpdateEventResponse
 } from "../generated/event";
 
-@Controller('events')
+@Controller('api/events')
 export class EventController {
     constructor(private readonly eventService: EventService) {
     }

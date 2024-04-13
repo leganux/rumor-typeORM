@@ -12,7 +12,7 @@ import {
     FindInviteRequestByIdResponse, UpdateInviteRequestRequest, UpdateInviteRequestResponse
 } from "../generated/invite_request";
 
-@Controller('invite-requests')
+@Controller('api/invite-requests')
 export class InviteRequestController {
     constructor(private readonly inviteRequestService: InviteRequestService) {
     }

@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package event;
+
+option go_package = "./event";
+
+message Event {
+    optional string id = 1;
+    string title = 2;
+    string description = 3;
+    string start_time = 4;
+    string end_time = 5;
+    repeated Guest guests = 6;
+    repeated InviteRequest invite_request = 7;
+}
+
+message Guest {
+    string id = 1;
+    Event event = 2;
+    User user = 3;
+}
+
+message User {
+    optional string id = 1;
+    string name = 2;
+    string email = 3;
+    string date_of_birth = 4;
+}
+
+message InviteRequest {
+    string id = 1;
+    string sender_id = 2;
+    string receiver_id = 3;
+}
+
+service EventService {
+    rpc CreateEvent (CreateEventRequest) returns (CreateEventResponse);
+    rpc FindAllEvents (FindAllEventsRequest) returns (FindAllEventsResponse);
+    rpc FindEventById (FindEventByIdRequest) returns (FindEventByIdResponse);
+    rpc UpdateEvent (UpdateEventRequest) returns (UpdateEventResponse);
+    rpc DeleteEvent (DeleteEventRequest) returns (DeleteEventResponse);
+}
+
+message FindAllEventsRequest {}
+
+message FindAllEventsResponse {
+    repeated Event events = 1;
+}
+
+message CreateEventRequest {
+
+    string title = 2;
+    string description = 3;
+    string start_time = 4;
+    string end_time = 5;
+    repeated Guest guests = 6;
+    repeated InviteRequest invite_request = 7;
+
+}
+
+message CreateEventResponse {
+    optional string id = 1;
+    string title = 2;
+    string description = 3;
+    string start_time = 4;
+    string end_time = 5;
+    repeated Guest guests = 6;
+    repeated InviteRequest invite_request = 7;
+
+}
+
+
+message FindEventByIdRequest {
+    string id = 1;
+}
+
+message FindEventByIdResponse {
+    optional string id = 1;
+    string title = 2;
+    string description = 3;
+    string start_time = 4;
+    string end_time = 5;
+    repeated Guest guests = 6;
+    repeated InviteRequest invite_request = 7;
+
+}
+
+message UpdateEventRequest {
+    optional string id = 1;
+    string title = 2;
+    string description = 3;
+    string start_time = 4;
+    string end_time = 5;
+    repeated Guest guests = 6;
+    repeated InviteRequest invite_request = 7;
+
+}
+
+message UpdateEventResponse {
+    optional string id = 1;
+    string title = 2;
+    string description = 3;
+    string start_time = 4;
+    string end_time = 5;
+    repeated Guest guests = 6;
+    repeated InviteRequest invite_request = 7;
+
+}
+
+message DeleteEventRequest {
+    string id = 1;
+}
+
+message DeleteEventResponse {
+    optional string id = 1;
+    string title = 2;
+    string description = 3;
+    string start_time = 4;
+    string end_time = 5;
+    repeated Guest guests = 6;
+    repeated InviteRequest invite_request = 7;
+
+}

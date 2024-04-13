@@ -1,9 +1,9 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import {NestFactory} from '@nestjs/core';
+import {AppModule} from './app.module';
+import {Transport, MicroserviceOptions} from '@nestjs/microservices';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
-import process from "process";
+
 
 async function bootstrap(): Promise<void> {
     try {
@@ -19,7 +19,7 @@ async function bootstrap(): Promise<void> {
     const protofileUser = path.join(__dirname, '..', 'public', 'user.proto');
     let uriGrpcUser = 'localhost:';
 
-    if (process.env.ENVIRONMENT !== 'develop') {
+    if (process?.env?.ENVIRONMENT !== 'develop') {
         uriGrpcUser = 'user_service:';
     }
 

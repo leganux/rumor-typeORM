@@ -18,7 +18,7 @@ import {
     FindGuestByIdRequest, FindGuestByIdResponse, UpdateGuestRequest, UpdateGuestResponse
 } from "../generated/guest";
 
-@Controller('guests')
+@Controller('api/guests')
 export class GuestController {
     constructor(private readonly guestService: GuestService) {
     }
