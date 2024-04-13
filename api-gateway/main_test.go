@@ -43,46 +43,18 @@ func TestLoginAndGetToken(t *testing.T) {
 	fmt.Printf("The token is %s", token)
 }
 
-func TestCreateOrderHandler(t *testing.T) {
-
-	fmt.Printf("Order handler Start ")
-	// Ensure token is obtained before running the test
-	if token == "" {
-		t.Fatal("Token not obtained from login")
-	}
-
-	// Simulate a request body
-	requestBody := []byte(`{
-        "customerId": "1",
-        "products": [
-            {
-                "productId": "1",
-                "quantity": 2
-            }
-        ]
-    }`)
-
-	// Create a new HTTP request with the request body
-	req, err := http.NewRequest("POST", "/api/orders/create", bytes.NewBuffer(requestBody))
+func TestGetAllUsersHandler(t *testing.T) {
+	// Simulate a request to get all users
+	req, err := http.NewRequest("GET", "/api/users", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	// Set the Authorization header with the obtained token
-	req.Header.Set("Authorization", token)
-
+	req.Header.Set("Authorization", ""+token)
 	// Create a ResponseRecorder to record the response
 	rr := httptest.NewRecorder()
-
-	// Call the createOrderHandler function directly, passing in the ResponseRecorder and the Request
-	http.HandlerFunc(createOrderHandler).ServeHTTP(rr, req)
-
-	// Print status response
-	fmt.Printf("Status Response: %v\n", rr.Code)
-
-	// Print response body JSON
-	fmt.Printf("Response Body JSON: %s\n", rr.Body.String())
-
+	// Call the getAllUsersHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(getAllUsersHandler).ServeHTTP(rr, req)
+	// Check the status code
 	// Parse response body as JSON
 	var responseBody map[string]interface{}
 	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
@@ -97,58 +69,24 @@ func TestCreateOrderHandler(t *testing.T) {
 	}
 
 	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
-	fmt.Printf("Order handler End")
 }
-
-func TestUpdateOrderHandler(t *testing.T) {
-	// Simulate a request body
+func TestCreateUserHandler(t *testing.T) {
+	// Simulate a request body to create a user
 	requestBody := []byte(`{
-		"id": "1",
-		"customerId": "1",
-		"products": [
-			{
-				"productId": "1",
-				"quantity": 3
-			}
-		]
+		"username": "testuser",
+		"email": "testuser@example.com",
+		"password": "password123"
 	}`)
 	// Create a new HTTP request with the request body
-	req, err := http.NewRequest("PUT", "/api/orders/update", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("POST", "/api/users/create", bytes.NewBuffer(requestBody))
 	if err != nil {
 		t.Fatal(err)
 	}
 	req.Header.Set("Authorization", ""+token)
 	// Create a ResponseRecorder to record the response
 	rr := httptest.NewRecorder()
-	// Call the updateOrderHandler function directly, passing in the ResponseRecorder and the Request
-	http.HandlerFunc(updateOrderHandler).ServeHTTP(rr, req)
-	// Parse response body as JSON
-	var responseBody map[string]interface{}
-	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
-		t.Fatalf("failed to unmarshal response body: %v", err)
-	}
-
-	// Check if 'success' and 'message' fields exist in the response
-	success, successExists := responseBody["success"].(bool)
-	message, messageExists := responseBody["message"].(string)
-	if !successExists || !messageExists {
-		t.Errorf("response does not contain 'success' or 'message' fields")
-	}
-
-	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
-}
-
-func TestDeleteOrderHandler(t *testing.T) {
-	// Simulate a request with an order ID to delete
-	req, err := http.NewRequest("DELETE", "/api/orders/delete?id=1", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-	req.Header.Set("Authorization", ""+token)
-	// Create a ResponseRecorder to record the response
-	rr := httptest.NewRecorder()
-	// Call the deleteOrderHandler function directly, passing in the ResponseRecorder and the Request
-	http.HandlerFunc(deleteOrderHandler).ServeHTTP(rr, req)
+	// Call the createUserHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(createUserHandler).ServeHTTP(rr, req)
 	// Check the status code
 	// Parse response body as JSON
 	var responseBody map[string]interface{}
@@ -165,18 +103,17 @@ func TestDeleteOrderHandler(t *testing.T) {
 
 	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
 }
-
-func TestGetAllOrdersHandler(t *testing.T) {
-	// Simulate a request to get all orders
-	req, err := http.NewRequest("GET", "/api/orders", nil)
+func TestGetUserByIdHandler(t *testing.T) {
+	// Simulate a request to get a user by ID
+	req, err := http.NewRequest("GET", "/api/users/get?id=1", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 	req.Header.Set("Authorization", ""+token)
 	// Create a ResponseRecorder to record the response
 	rr := httptest.NewRecorder()
-	// Call the getAllOrdersHandler function directly, passing in the ResponseRecorder and the Request
-	http.HandlerFunc(getAllOrdersHandler).ServeHTTP(rr, req)
+	// Call the getUserByIdHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(getUserByIdHandler).ServeHTTP(rr, req)
 	// Check the status code
 	// Parse response body as JSON
 	var responseBody map[string]interface{}
@@ -193,25 +130,110 @@ func TestGetAllOrdersHandler(t *testing.T) {
 
 	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
 }
-
-func TestCreateProductHandler(t *testing.T) {
-	// Simulate a request body to create a product
+func TestUpdateUserHandler(t *testing.T) {
+	// Simulate a request body to update a user
 	requestBody := []byte(`{
-		"name": "Test Product",
+		"id": "1",
+		"username": "updateduser",
+		"email": "updateduser@example.com"
+	}`)
+	// Create a new HTTP request with the request body
+	req, err := http.NewRequest("PUT", "/api/users/update", bytes.NewBuffer(requestBody))
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the updateUserHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(updateUserHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestDeleteUserHandler(t *testing.T) {
+	// Simulate a request with a user ID to delete
+	req, err := http.NewRequest("DELETE", "/api/users/delete?id=1", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the deleteUserHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(deleteUserHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestGetAllEventsHandler(t *testing.T) {
+	// Simulate a request to get all events
+	req, err := http.NewRequest("GET", "/api/events", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the getAllEventsHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(getAllEventsHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestCreateEventHandler(t *testing.T) {
+	// Simulate a request body to create an event
+	requestBody := []byte(`{
+		"name": "Test Event",
 		"description": "Test Description",
-		"price": 10.99,
-		"quantity": 100
+		"date": "2024-04-13T12:00:00Z"
 	}`)
 	// Create a new HTTP request with the request body
-	req, err := http.NewRequest("POST", "/api/products/create", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("POST", "/api/events/create", bytes.NewBuffer(requestBody))
 	if err != nil {
 		t.Fatal(err)
 	}
 	req.Header.Set("Authorization", ""+token)
 	// Create a ResponseRecorder to record the response
 	rr := httptest.NewRecorder()
-	// Call the createProductHandler function directly, passing in the ResponseRecorder and the Request
-	http.HandlerFunc(createProductHandler).ServeHTTP(rr, req)
+	// Call the createEventHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(createEventHandler).ServeHTTP(rr, req)
 	// Check the status code
 	// Parse response body as JSON
 	var responseBody map[string]interface{}
@@ -228,26 +250,51 @@ func TestCreateProductHandler(t *testing.T) {
 
 	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
 }
+func TestGetEventHandler(t *testing.T) {
+	// Simulate a request to get an event by ID
+	req, err := http.NewRequest("GET", "/api/events/get?id=1", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the getEventHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(getEventHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
 
-func TestUpdateProductHandler(t *testing.T) {
-	// Simulate a request body to update a product
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestUpdateEventHandler(t *testing.T) {
+	// Simulate a request body to update an event
 	requestBody := []byte(`{
 		"id": "1",
-		"name": "Updated Test Product",
+		"name": "Updated Test Event",
 		"description": "Updated Test Description",
-		"price": 15.99,
-		"quantity": 150
+		"date": "2024-04-14T12:00:00Z"
 	}`)
 	// Create a new HTTP request with the request body
-	req, err := http.NewRequest("PUT", "/api/products/update", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("PUT", "/api/events/update", bytes.NewBuffer(requestBody))
 	if err != nil {
 		t.Fatal(err)
 	}
 	req.Header.Set("Authorization", ""+token)
 	// Create a ResponseRecorder to record the response
 	rr := httptest.NewRecorder()
-	// Call the updateProductHandler function directly, passing in the ResponseRecorder and the Request
-	http.HandlerFunc(updateProductHandler).ServeHTTP(rr, req)
+	// Call the updateEventHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(updateEventHandler).ServeHTTP(rr, req)
 	// Check the status code
 	// Parse response body as JSON
 	var responseBody map[string]interface{}
@@ -264,18 +311,17 @@ func TestUpdateProductHandler(t *testing.T) {
 
 	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
 }
-
-func TestDeleteProductHandler(t *testing.T) {
-	// Simulate a request with a product ID to delete
-	req, err := http.NewRequest("DELETE", "/api/products/delete?id=1", nil)
+func TestDeleteEventHandler(t *testing.T) {
+	// Simulate a request with an event ID to delete
+	req, err := http.NewRequest("DELETE", "/api/events/delete?id=1", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 	req.Header.Set("Authorization", ""+token)
 	// Create a ResponseRecorder to record the response
 	rr := httptest.NewRecorder()
-	// Call the deleteProductHandler function directly, passing in the ResponseRecorder and the Request
-	http.HandlerFunc(deleteProductHandler).ServeHTTP(rr, req)
+	// Call the deleteEventHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(deleteEventHandler).ServeHTTP(rr, req)
 	// Check the status code
 	// Parse response body as JSON
 	var responseBody map[string]interface{}
@@ -292,18 +338,282 @@ func TestDeleteProductHandler(t *testing.T) {
 
 	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
 }
-
-func TestGetAllProductsHandler(t *testing.T) {
-	// Simulate a request to get all products
-	req, err := http.NewRequest("GET", "/api/products", nil)
+func TestGetAllGuestsHandler(t *testing.T) {
+	// Simulate a request to get all guests
+	req, err := http.NewRequest("GET", "/api/guests", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 	req.Header.Set("Authorization", ""+token)
 	// Create a ResponseRecorder to record the response
 	rr := httptest.NewRecorder()
-	// Call the getAllProductsHandler function directly, passing in the ResponseRecorder and the Request
-	http.HandlerFunc(getAllProductsHandler).ServeHTTP(rr, req)
+	// Call the getAllGuestsHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(getAllGuestsHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestCreateGuestHandler(t *testing.T) {
+	// Simulate a request body to create a guest
+	requestBody := []byte(`{
+		"name": "Test Guest",
+		"email": "testguest@example.com"
+	}`)
+	// Create a new HTTP request with the request body
+	req, err := http.NewRequest("POST", "/api/guests/create", bytes.NewBuffer(requestBody))
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the createGuestHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(createGuestHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestGetGuestHandler(t *testing.T) {
+	// Simulate a request to get a guest by ID
+	req, err := http.NewRequest("GET", "/api/guests/get?id=1", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the getGuestHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(getGuestHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestUpdateGuestHandler(t *testing.T) {
+	// Simulate a request body to update a guest
+	requestBody := []byte(`{
+		"id": "1",
+		"name": "Updated Test Guest",
+		"email": "updatedtestguest@example.com"
+	}`)
+	// Create a new HTTP request with the request body
+	req, err := http.NewRequest("PUT", "/api/guests/update", bytes.NewBuffer(requestBody))
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the updateGuestHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(updateGuestHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestDeleteGuestHandler(t *testing.T) {
+	// Simulate a request with a guest ID to delete
+	req, err := http.NewRequest("DELETE", "/api/guests/delete?id=1", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the deleteGuestHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(deleteGuestHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestGetAllInviteRequestsHandler(t *testing.T) {
+	// Simulate a request to get all invite requests
+	req, err := http.NewRequest("GET", "/api/invite-requests", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the getAllInviteRequestsHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(getAllInviteRequestsHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestCreateInviteRequestHandler(t *testing.T) {
+	// Simulate a request body to create an invite request
+	requestBody := []byte(`{
+		"eventName": "Test Event",
+		"guestName": "Test Guest",
+		"email": "testguest@example.com"
+	}`)
+	// Create a new HTTP request with the request body
+	req, err := http.NewRequest("POST", "/api/invite-requests/create", bytes.NewBuffer(requestBody))
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the createInviteRequestHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(createInviteRequestHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestGetInviteRequestHandler(t *testing.T) {
+	// Simulate a request to get an invite request by ID
+	req, err := http.NewRequest("GET", "/api/invite-requests/get?id=1", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the getInviteRequestHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(getInviteRequestHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestUpdateInviteRequestHandler(t *testing.T) {
+	// Simulate a request body to update an invite request
+	requestBody := []byte(`{
+		"id": "1",
+		"status": "accepted"
+	}`)
+	// Create a new HTTP request with the request body
+	req, err := http.NewRequest("PUT", "/api/invite-requests/update", bytes.NewBuffer(requestBody))
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the updateInviteRequestHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(updateInviteRequestHandler).ServeHTTP(rr, req)
+	// Check the status code
+	// Parse response body as JSON
+	var responseBody map[string]interface{}
+	if err := json.Unmarshal(rr.Body.Bytes(), &responseBody); err != nil {
+		t.Fatalf("failed to unmarshal response body: %v", err)
+	}
+
+	// Check if 'success' and 'message' fields exist in the response
+	success, successExists := responseBody["success"].(bool)
+	message, messageExists := responseBody["message"].(string)
+	if !successExists || !messageExists {
+		t.Errorf("response does not contain 'success' or 'message' fields")
+	}
+
+	fmt.Printf("Test successfully executed :: Parameters correctly appear in format response. \n  { success: %v, message: %s } \n", success, message)
+}
+func TestDeleteInviteRequestHandler(t *testing.T) {
+	// Simulate a request with an invite request ID to delete
+	req, err := http.NewRequest("DELETE", "/api/invite-requests/delete?id=1", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", ""+token)
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+	// Call the deleteInviteRequestHandler function directly, passing in the ResponseRecorder and the Request
+	http.HandlerFunc(deleteInviteRequestHandler).ServeHTTP(rr, req)
 	// Check the status code
 	// Parse response body as JSON
 	var responseBody map[string]interface{}

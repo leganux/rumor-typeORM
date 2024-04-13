@@ -1,0 +1,13 @@
+
+Ztypescript:S1128"2Remove this unused import of 'CreateEventRequest'.(îª“²øÿÿÿÿ8ÌÐøœí1
+Vtypescript:S1128"3Remove this unused import of 'CreateEventResponse'.(« òù8ÍÐøœí1
+Utypescript:S1128"2Remove this unused import of 'DeleteEventRequest'.(« òù8ÍÐøœí1
+Vtypescript:S1128"3Remove this unused import of 'DeleteEventResponse'.(« òù8ÍÐøœí1
+Wtypescript:S1128	"4Remove this unused import of 'FindAllEventsRequest'.(¯æóˆ8ÍÐøœí1
+]typescript:S1128
+"5Remove this unused import of 'FindAllEventsResponse'.(¡ÂÑ‰ùÿÿÿÿ8ÍÐøœí1
+Wtypescript:S1128"4Remove this unused import of 'FindEventByIdRequest'.(›ŽÚŒ8ÍÐøœí1
+Xtypescript:S1128"5Remove this unused import of 'FindEventByIdResponse'.(›ŽÚŒ8ÍÐøœí1
+Utypescript:S1128"2Remove this unused import of 'UpdateEventRequest'.(›ŽÚŒ8ÍÐøœí1
+Vtypescript:S1128"3Remove this unused import of 'UpdateEventResponse'.(›ŽÚŒ8ÍÐøœí1
+Htypescript:S1128"%Remove this unused import of 'Event'.(ÞÊØ­8ÍÐøœí1

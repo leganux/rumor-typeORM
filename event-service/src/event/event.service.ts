@@ -8,14 +8,14 @@ import {Event} from './event.entity';
 import {
     CreateEventRequest,
     CreateEventResponse,
+    DeleteEventRequest,
     DeleteEventResponse,
     FindAllEventsRequest,
     FindAllEventsResponse,
     FindEventByIdRequest,
     FindEventByIdResponse,
     UpdateEventRequest,
-    UpdateEventResponse,
-    Guest, DeleteEventRequest
+    UpdateEventResponse
 } from "../generated/event";
 
 @Injectable()
@@ -65,8 +65,8 @@ export class EventService {
             id: savedEvent.id,
             title: savedEvent.title,
             description: savedEvent.description,
-            startTime: savedEvent.startTime.toISOString(),
-            endTime: savedEvent.endTime.toISOString(),
+            startTime: String(savedEvent.startTime),
+            endTime: String(savedEvent.endTime),
             guests: guests,
             inviteRequest: inviteRequests,
         };
@@ -83,8 +83,8 @@ export class EventService {
                 id: item.id,
                 title: item.title,
                 description: item.description,
-                startTime: item.startTime.toISOString(),
-                endTime: item.endTime.toISOString(),
+                startTime: String(item.startTime),
+                endTime: String(item.endTime),
                 guests: guests,
                 inviteRequest: inviteRequests,
             }
@@ -101,8 +101,8 @@ export class EventService {
             id: savedEvent.id,
             title: savedEvent.title,
             description: savedEvent.description,
-            startTime: savedEvent.startTime.toISOString(),
-            endTime: savedEvent.endTime.toISOString(),
+            startTime: String(savedEvent.startTime),
+            endTime: String(savedEvent.endTime),
             guests: guests,
             inviteRequest: inviteRequests,
         };
@@ -120,8 +120,8 @@ export class EventService {
             id: savedEvent.id,
             title: savedEvent.title,
             description: savedEvent.description,
-            startTime: savedEvent.startTime.toISOString(),
-            endTime: savedEvent.endTime.toISOString(),
+            startTime: String(savedEvent.startTime),
+            endTime: String(savedEvent.endTime),
             guests: guests,
             inviteRequest: inviteRequests,
         };
@@ -137,8 +137,8 @@ export class EventService {
             id: savedEvent.id,
             title: savedEvent.title,
             description: savedEvent.description,
-            startTime: savedEvent.startTime.toISOString(),
-            endTime: savedEvent.endTime.toISOString(),
+            startTime: String(savedEvent.startTime),
+            endTime: String(savedEvent.endTime),
             guests: guests,
             inviteRequest: inviteRequests,
         };

@@ -643,8 +643,9 @@ func main() {
 	}
 
 	router := mux.NewRouter()
-	router.HandleFunc("/login", loginHandler).Methods("POST")
 
+	router.HandleFunc("/login", loginHandler).Methods("POST")
+	//user
 	router.HandleFunc("/api/users", getAllUsersHandler).Methods("GET")
 	router.HandleFunc("/api/users/create", createUserHandler).Methods("POST")
 	router.HandleFunc("/api/users/get", getUserByIdHandler).Methods("GET")

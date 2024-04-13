@@ -8,7 +8,8 @@ import {UpdateUserDto} from "./dto/update-user.dto";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {
     CreateUserRequest,
-    CreateUserResponse, DeleteUserRequest,
+    CreateUserResponse,
+    DeleteUserRequest,
     DeleteUserResponse,
     FindAllUsersRequest,
     FindAllUsersResponse,
@@ -56,7 +57,7 @@ export class UserService {
             id: savedUser.id,
             name: savedUser.name,
             email: savedUser.email,
-            dateOfBirth: savedUser.dateOfBirth.toISOString(),
+            dateOfBirth: String(savedUser.dateOfBirth),
         };
     }
 
@@ -68,7 +69,7 @@ export class UserService {
                 id: item.id,
                 name: item.name,
                 email: item.email,
-                dateOfBirth: item.dateOfBirth.toISOString(),
+                dateOfBirth: String(item.dateOfBirth),
             }
         })
         return {users: x}
@@ -80,7 +81,7 @@ export class UserService {
             id: savedUser.id,
             name: savedUser.name,
             email: savedUser.email,
-            dateOfBirth: savedUser.dateOfBirth.toISOString(),
+            dateOfBirth: String(savedUser.dateOfBirth),
         };
     }
 
@@ -93,7 +94,7 @@ export class UserService {
             id: savedUser.id,
             name: savedUser.name,
             email: savedUser.email,
-            dateOfBirth: savedUser.dateOfBirth.toISOString(),
+            dateOfBirth: String(savedUser.dateOfBirth),
         };
     }
 
@@ -104,7 +105,7 @@ export class UserService {
             id: savedUser.id,
             name: savedUser.name,
             email: savedUser.email,
-            dateOfBirth: savedUser.dateOfBirth.toISOString(),
+            dateOfBirth: String(savedUser.dateOfBirth),
         };
 
     }

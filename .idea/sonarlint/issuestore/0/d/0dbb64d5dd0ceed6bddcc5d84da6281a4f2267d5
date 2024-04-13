@@ -1,0 +1,11 @@
+
+Ztypescript:S1128"2Remove this unused import of 'CreateEventRequest'.(îª“²øÿÿÿÿ8±‚è™í1
+[typescript:S1128"3Remove this unused import of 'CreateEventResponse'.(¹Ÿîÿÿÿÿÿ8î¥è™í1
+[typescript:S1128"3Remove this unused import of 'DeleteEventResponse'.(¹Ÿîÿÿÿÿÿ8âë™í1
+Wtypescript:S1128	"4Remove this unused import of 'FindAllEventsRequest'.(¯æóˆ8¼¿é™í1
+]typescript:S1128
+"5Remove this unused import of 'FindAllEventsResponse'.(¡ÂÑ‰ùÿÿÿÿ8¼¿é™í1
+Wtypescript:S1128"4Remove this unused import of 'FindEventByIdRequest'.(›ÚŒ8ö¦ê™í1
+Xtypescript:S1128"5Remove this unused import of 'FindEventByIdResponse'.(›ÚŒ8÷¦ê™í1
+Utypescript:S1128"2Remove this unused import of 'UpdateEventRequest'.(›ÚŒ8ãë™í1
+Vtypescript:S1128"3Remove this unused import of 'UpdateEventResponse'.(›ÚŒ8ãë™í1
