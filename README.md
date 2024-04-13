@@ -502,18 +502,130 @@ fetch("http://localhost:8080/api/guests/delete?id=ID_DEL_INVITADO", requestOptio
 
 * POST /api/invite-requests/create:
   Endpoint to create a new invite-requests to database
+```javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "tu_token_de_autorización");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+    "requester": {
+        "id": "ID_DEL_USUARIO_QUE_ENVÍA_LA_SOLICITUD"
+    },
+    "invited_user": {
+        "id": "ID_DEL_USUARIO_INVITADO"
+    },
+    "event": {
+        "id": "ID_DEL_EVENTO"
+    },
+    "status": "Pendiente",
+    "created_at": "Fecha_y_hora_de_creación"
+});
+
+const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow"
+};
+
+fetch("http://localhost:8080/api/invite-requests/create", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.error('Error:', error));
+
+```
+
 
 * GET /api/invite-requests:
   Endpoint to get all invite-requests on database
+```javascript
+const requestOptions = {
+    method: "GET",
+    headers: {
+        "Authorization": "tu_token_de_autorización",
+        "Content-Type": "application/json"
+    },
+    redirect: "follow"
+};
 
+fetch("http://localhost:8080/api/invite-requests", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.error('Error:', error));
+
+```
 * GET /api/invite-requests/get?id=<id_user>:
   Endpoint to get a invite-requests from database
+```javascript
+const requestOptions = {
+    method: "GET",
+    headers: {
+        "Authorization": "tu_token_de_autorización",
+        "Content-Type": "application/json"
+    },
+    redirect: "follow"
+};
 
+fetch("http://localhost:8080/api/invite-requests/get?id=ID_DE_LA_SOLICITUD", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.error('Error:', error));
+
+```
 * GET /api/invite-requests/update:
   Endpoint to update an invite-requests from database
+```javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "tu_token_de_autorización");
+myHeaders.append("Content-Type", "application/json");
 
+const raw = JSON.stringify({
+    "id": "ID_DE_LA_SOLICITUD",
+    "requester": {
+        "id": "ID_DEL_USUARIO_QUE_ENVÍA_LA_SOLICITUD"
+    },
+    "invited_user": {
+        "id": "ID_DEL_USUARIO_INVITADO"
+    },
+    "event": {
+        "id": "ID_DEL_EVENTO"
+    },
+    "status": "Aceptada",
+    "updated_at": "Fecha_y_hora_de_actualización"
+});
+
+const requestOptions = {
+    method: "PUT",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow"
+};
+
+fetch("http://localhost:8080/api/invite-requests/update", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.error('Error:', error));
+
+```
 * DELETE /api/invite-requests/delete:
   Endpoint to update an invite-requests from database
+```javascript
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "tu_token_de_autorización");
+
+const requestOptions = {
+    method: "DELETE",
+    headers: myHeaders,
+    redirect: "follow"
+};
+
+fetch("http://localhost:8080/api/invite-requests/delete?id=ID_DE_LA_SOLICITUD", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.error('Error:', error));
+
+```
+
 
 ```javascript 
 const myHeaders = new Headers();
@@ -534,8 +646,7 @@ fetch("http://localhost:8080/api/users/delete?id=936a4103-2352-4480-86fb-d51386b
     .catch((error) => console.error(error));
 ```
 
-* DELETE /api/events/delete:
-  Endpoint to update an user from database
+
 
 ### Response Standardized example
 
