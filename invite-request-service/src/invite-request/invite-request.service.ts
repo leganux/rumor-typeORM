@@ -27,15 +27,25 @@ export class InviteRequestService {
 
     async create(inviteRequestData: Partial<InviteRequest>): Promise<InviteRequest> {
         const inviteRequest = this.inviteRequestRepository.create(inviteRequestData);
-        return this.inviteRequestRepository.save(inviteRequest);
+        let elem = await this.inviteRequestRepository.save(inviteRequest);
+        const guestWithRelations = await this.inviteRequestRepository.findOne({
+            where: {id: elem.id},
+            relations: ['requester', 'invitedUser', 'event'],
+        });
+        return guestWithRelations
     }
 
     async findAll(): Promise<InviteRequest[]> {
-        return this.inviteRequestRepository.find();
+        return this.inviteRequestRepository.find({
+            relations: ['requester', 'invitedUser', 'event']
+        });
     }
 
     async findOne(id: string): Promise<InviteRequest> {
-        return this.inviteRequestRepository.findOneBy({id});
+        return await this.inviteRequestRepository.findOne({
+            where: {id: id},
+            relations: ['requester', 'invitedUser', 'event'],
+        });
     }
 
     async update(id: string, inviteRequestData: Partial<InviteRequest>): Promise<InviteRequest> {
@@ -44,7 +54,11 @@ export class InviteRequestService {
             throw new Error('Solicitud de invitación no encontrada');
         }
         Object.assign(inviteRequest, inviteRequestData);
-        return this.inviteRequestRepository.save(inviteRequest);
+        let elem = await this.inviteRequestRepository.save(inviteRequest);
+        return await this.inviteRequestRepository.findOne({
+            where: {id: elem.id},
+            relations: ['requester', 'invitedUser', 'event'],
+        });
     }
 
     async remove(id: string): Promise<void> {
@@ -58,22 +72,30 @@ export class InviteRequestService {
         const newInviteRequest = this.inviteRequestRepository.create(createInviteRequestDto);
         const savedInviteRequest = await this.inviteRequestRepository.save(newInviteRequest);
 
-        const requester: any = savedInviteRequest.requester ? savedInviteRequest.requester : null;
-        const invitedUser: any = savedInviteRequest.invitedUser ? savedInviteRequest.invitedUser : null;
-        const event: any = savedInviteRequest.event ? savedInviteRequest.event : null;
+        let elem = await this.inviteRequestRepository.findOne({
+            where: {id: savedInviteRequest.id},
+            relations: ['requester', 'invitedUser', 'event'],
+        });
+
+        const requester: any = elem.requester ? elem.requester : null;
+        const invitedUser: any = elem.invitedUser ? elem.invitedUser : null;
+        const event: any = elem.event ? elem.event : null;
         return {
-            id: savedInviteRequest.id,
-            status: savedInviteRequest.status,
+            id: elem.id,
+            status: elem.status,
             invitedUser,
             requester,
             event,
-            createdAt: savedInviteRequest.createdAt.toISOString(),
-            updatedAt: savedInviteRequest.updatedAt.toISOString()
+            createdAt: elem.createdAt.toISOString(),
+            updatedAt: elem.updatedAt.toISOString()
         };
     }
 
     async findAllInviteRequestsGRPC(find: FindAllInviteRequestsRequest): Promise<FindAllInviteRequestsResponse> {
-        let InviteRequests = await this.inviteRequestRepository.find(find);
+        let InviteRequests = await this.inviteRequestRepository.find({
+            ...find,
+            relations: ['requester', 'invitedUser', 'event'],
+        });
         let x: any = InviteRequests.map((item: InviteRequest) => {
             const requester: any = item.requester ? item.requester : null;
             const invitedUser: any = item.invitedUser ? item.invitedUser : null;
@@ -94,7 +116,10 @@ export class InviteRequestService {
     }
 
     async findInviteRequestByIdGRPC(data: FindInviteRequestByIdRequest): Promise<FindInviteRequestByIdResponse> {
-        let savedInviteRequest = await this.inviteRequestRepository.findOneBy({id: data.id});
+        let savedInviteRequest = await this.inviteRequestRepository.findOne({
+            where: {id: data.id},
+            relations: ['requester', 'invitedUser', 'event'],
+        });
         const requester: any = savedInviteRequest.requester ? savedInviteRequest.requester : null;
         const invitedUser: any = savedInviteRequest.invitedUser ? savedInviteRequest.invitedUser : null;
         const event: any = savedInviteRequest.event ? savedInviteRequest.event : null;
@@ -113,7 +138,10 @@ export class InviteRequestService {
         let updateData: any = {...data}
         delete updateData.id
         await this.inviteRequestRepository.update(data.id, updateData);
-        let savedInviteRequest = await this.inviteRequestRepository.findOneBy({id: data.id});
+        let savedInviteRequest = await this.inviteRequestRepository.findOne({
+            where: {id: data.id},
+            relations: ['requester', 'invitedUser', 'event'],
+        });
 
         const requester: any = savedInviteRequest.requester ? savedInviteRequest.requester : null;
         const invitedUser: any = savedInviteRequest.invitedUser ? savedInviteRequest.invitedUser : null;
@@ -130,7 +158,10 @@ export class InviteRequestService {
     }
 
     async deleteInviteRequestGRPC(data: DeleteInviteRequestRequest): Promise<DeleteInviteRequestResponse> {
-        let savedInviteRequest = await this.inviteRequestRepository.findOneBy({id: data.id});
+        let savedInviteRequest = await this.inviteRequestRepository.findOne({
+            where: {id: data.id},
+            relations: ['requester', 'invitedUser', 'event'],
+        });
 
         const requester: any = savedInviteRequest.requester ? savedInviteRequest.requester : null;
         const invitedUser: any = savedInviteRequest.invitedUser ? savedInviteRequest.invitedUser : null;

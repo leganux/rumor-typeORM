@@ -4,19 +4,16 @@ import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 import {Guest} from './guest.entity';
 import {
-    CreateEventRequest,
-    CreateEventResponse, DeleteEventRequest, DeleteEventResponse,
-    FindAllEventsRequest,
-    FindAllEventsResponse,
-    FindEventByIdRequest, FindEventByIdResponse, UpdateEventRequest, UpdateEventResponse
-} from "../generated/event";
-import {Event} from "../event/event.entity";
-import {
     CreateGuestRequest,
-    CreateGuestResponse, DeleteGuestRequest, DeleteGuestResponse,
+    CreateGuestResponse,
+    DeleteGuestRequest,
+    DeleteGuestResponse,
     FindAllGuestsRequest,
     FindAllGuestsResponse,
-    FindGuestByIdRequest, FindGuestByIdResponse, UpdateGuestRequest, UpdateGuestResponse
+    FindGuestByIdRequest,
+    FindGuestByIdResponse,
+    UpdateGuestRequest,
+    UpdateGuestResponse
 } from "../generated/guest";
 
 @Injectable()
@@ -29,15 +26,28 @@ export class GuestService {
 
     async create(guestData: Partial<Guest>): Promise<Guest> {
         const guest = this.guestRepository.create(guestData);
-        return this.guestRepository.save(guest);
+        let elem = await this.guestRepository.save(guest);
+        const guestWithRelations = await this.guestRepository.findOne({
+            where: {id: elem.id},
+            relations: ['user', 'event'],
+
+        });
+        return guestWithRelations
     }
 
     async findAll(): Promise<Guest[]> {
-        return this.guestRepository.find();
+        return this.guestRepository.find({
+            relations: ['user', 'event'],
+
+        });
     }
 
     async findOne(id: string): Promise<Guest> {
-        return this.guestRepository.findOneBy({id: id});
+        return await this.guestRepository.findOne({
+            where: {id: id},
+            relations: ['user', 'event'],
+
+        })
     }
 
     async update(id: string, guestData: Partial<Guest>): Promise<Guest> {
@@ -58,18 +68,30 @@ export class GuestService {
     async createGuestGRPC(createGuestDto: CreateGuestRequest): Promise<CreateGuestResponse> {
         const newGuest = this.guestRepository.create(createGuestDto);
         const savedGuest = await this.guestRepository.save(newGuest);
-        const event: any = savedGuest.event ? savedGuest.event : null;
-        const user: any = savedGuest.user ? savedGuest.user : null;
+
+        const guestWithRelations = await this.guestRepository.findOne({
+            where: {id: savedGuest.id},
+            relations: ['user', 'event'],
+
+        });
+
+        const event: any = guestWithRelations.event ? guestWithRelations.event : null;
+        const user: any = guestWithRelations.user ? guestWithRelations.user : null;
         return {
-            id: savedGuest.id,
+            id: guestWithRelations.id,
             event: event,
             user: user,
         };
     }
 
     async findAllGuestsGRPC(find: FindAllGuestsRequest): Promise<FindAllGuestsResponse> {
-        let Guests = await this.guestRepository.find(find);
-        let x: any = Guests.map((item: Guest) => {
+        let guests = await this.guestRepository.find({
+            ...find,
+            relations: ['user', 'event'],
+
+        });
+
+        let x: any = guests.map((item: Guest) => {
             const event: any = item.event ? item.event : null;
             const user: any = item.user ? item.user : null;
 
@@ -79,11 +101,17 @@ export class GuestService {
                 user: user
             }
         })
+
         return {guests: x}
     }
 
     async findGuestByIdGRPC(data: FindGuestByIdRequest): Promise<FindGuestByIdResponse> {
-        let savedGuest = await this.guestRepository.findOneBy({id: data.id});
+        let savedGuest = await this.guestRepository.findOne({
+            where: {id: data.id},
+            relations: ['user', 'event'],
+
+        });
+
         const event: any = savedGuest.event ? savedGuest.event : null;
         const user: any = savedGuest.user ? savedGuest.user : null;
 
@@ -97,7 +125,11 @@ export class GuestService {
         let updateData: any = {...data}
         delete updateData.id
         await this.guestRepository.update(data.id, updateData);
-        let savedGuest = await this.guestRepository.findOneBy({id: data.id});
+        let savedGuest = await this.guestRepository.findOne({
+            where: {id: data.id},
+            relations: ['user', 'event'],
+
+        });
         const event: any = savedGuest.event ? savedGuest.event : null;
         const user: any = savedGuest.user ? savedGuest.user : null;
 
@@ -108,16 +140,17 @@ export class GuestService {
     }
 
     async deleteGuestGRPC(data: DeleteGuestRequest): Promise<DeleteGuestResponse> {
-        let savedGuest = await this.guestRepository.findOneBy({id: data.id});
+        let savedGuest = await this.guestRepository.findOne({
+            where: {id: data.id},
+            relations: ['user', 'event'],
+
+        });
         const event: any = savedGuest.event ? savedGuest.event : null;
         const user: any = savedGuest.user ? savedGuest.user : null;
-
         await this.guestRepository.delete(data.id);
         return {
             id: savedGuest.id,
             user, event
         };
-
     }
-
 }

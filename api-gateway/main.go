@@ -30,7 +30,7 @@ var inviteRequestClient inviteRequestpb.InviteRequestServiceClient
 var userServiceAddress = "user_service:50057"
 var eventServiceAddress = "event_service:50058"
 var guestServiceAddress = "guest_service:50059"
-var inviteRequestServiceAddress = "guest_service:50060"
+var inviteRequestServiceAddress = "invite_request_service:50060"
 
 var rumorSecretKey = "rumor_secret_key"
 var rumorUser = "admin"
