@@ -1,0 +1,771 @@
+{
+	"info": {
+		"_postman_id": "e61e0a6a-66df-4f73-8c5b-e81e1a8ffac8",
+		"name": "Rumor-typeorm",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30232086"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"set global var\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"rumor_token\", jsonData.token);",
+							"    ",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Username\":\"admin\",\n    \"Password\":\"Kt3RickS0n\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create an user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Angel\",\n    \"email\":\"Angel@mail.com\",\n    \"date_of_birth\":\"1993-04-11\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Erick\",\n    \"email\":\"erick@mail.com\",\n    \"date_of_birth\":\"1993-04-11\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a user",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Erick\",\n    \"email\":\"erick@mail.com\",\n    \"date_of_birth\":\"1993-04-11\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/get?id=936a4103-2352-4480-86fb-d51386bb002b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"get"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "936a4103-2352-4480-86fb-d51386bb002b"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a user",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Erick2\",\n    \"email\": \"eric2k@mail.com\",\n    \"date_of_birth\": \"1993-04-11\",\n    \"id\": \"936a4103-2352-4480-86fb-d51386bb002b\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a user",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/delete?id=936a4103-2352-4480-86fb-d51386bb002b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"delete"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "936a4103-2352-4480-86fb-d51386bb002b"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create an event",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Título del evento\",\n    \"description\": \"Descripción del evento\",\n    \"start_time\": \"2024-04-13T08:00:00\",\n    \"end_time\": \"2024-04-13T10:00:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/events/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"events",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all events",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a event",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/events/get?id=ec56e352-2a57-4834-a92a-767f3957b975",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"events",
+						"get"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "ec56e352-2a57-4834-a92a-767f3957b975"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update an event",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Event titleo\",\n    \"description\": \"Descripción del evento\",\n    \"start_time\": \"2024-04-13T08:00:00\",\n    \"end_time\": \"2024-04-13T10:00:00\",\n    \"id\": \"ec56e352-2a57-4834-a92a-767f3957b975\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/events/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"events",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete an event",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/events/delete?id=ec56e352-2a57-4834-a92a-767f3957b975",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"events",
+						"delete"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "ec56e352-2a57-4834-a92a-767f3957b975"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a guest",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"event\": {\n        \"id\": \"ff373548-b50f-448a-88c7-cc9873c72d96\"\n    },\n    \"user\": {\n        \"id\": \"4d52ee2f-d29b-4033-8481-a2db53c03d20\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/guests/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"guests",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all guests",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/guests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"guests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a guest",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/guests/get?id=b3bf5aed-4f00-4e6d-93aa-d0bf6af97d89",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"guests",
+						"get"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "b3bf5aed-4f00-4e6d-93aa-d0bf6af97d89"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a guests",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requester\": {\n        \"id\": \"4d52ee2f-d29b-4033-8481-a2db53c03d20\"\n    },\n    \"invited_user\": {\n        \"id\": \"44996955-8e6b-4cd4-879e-36bb2d903d7d\"\n    },\n    \"event\": {\n        \"id\": \"ff373548-b50f-448a-88c7-cc9873c72d96\"\n    },\n    \"status\": \"Done\",\n    \"created_at\": \"2024-01-13\",\n    \"id\": \"70128378-9cee-4d3e-8448-fdce226a583f\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/invite-requests/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"invite-requests",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a guests",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/invite-requests/delete?id=70128378-9cee-4d3e-8448-fdce226a583f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"invite-requests",
+						"delete"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "70128378-9cee-4d3e-8448-fdce226a583f"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a invite request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requester\": {\n        \"id\": \"4d52ee2f-d29b-4033-8481-a2db53c03d20\"\n    },\n    \"invited_user\": {\n        \"id\": \"44996955-8e6b-4cd4-879e-36bb2d903d7d\"\n    },\n    \"event\": {\n        \"id\": \"ff373548-b50f-448a-88c7-cc9873c72d96\"\n    },\n    \"status\": \"Pending\",\n    \"created_at\": \"2024-01-13\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/invite-requests/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"invite-requests",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all invite request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/invite-requests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"invite-requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a invite request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{rumor_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/invite-requests/get?id=70128378-9cee-4d3e-8448-fdce226a583f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"invite-requests",
+						"get"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "70128378-9cee-4d3e-8448-fdce226a583f"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "rumor_token",
+			"value": ""
+		}
+	]
+}
