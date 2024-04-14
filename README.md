@@ -1,3 +1,5 @@
+<center><img src="./rise.png"></center>
+
 ## API Gateway With TypeORM and database
 
 This repository contains the code for an API Gateway that acts as an entry point to interact with microservices managing
@@ -16,7 +18,6 @@ Execution:
 
 ```bash
  git clone https://github.com/leganux/rumor-typeORM
-
  ```
 
 2. Rename env_example on the api gateway, order and product services folders to .env (and modify them if needed)
@@ -49,9 +50,6 @@ docker-compose up
     -guest-service
     RADME.md
     docker-compose.yml
-    
-    
-    
  ```
 
 *Description Folders*
@@ -125,7 +123,6 @@ Example:
 ```json
  {
   "id": "936a4103-2352-4480-86fb-d51386bb002b",
-  // this is an example of ID in a response
   "name": "Erick",
   "email": "erick@mail.com",
   "date_of_birth": "Sun Apr 11 1993 00:00:00 GMT+0000 (Coordinated Universal Time)"
@@ -322,8 +319,6 @@ fetch("http://localhost:8080/api/events/get?id=ID_DEL_EVENTO", requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
-
 ```
 
 * PUT /api/events/update:
@@ -353,12 +348,11 @@ fetch("http://localhost:8080/api/events/update", requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
 ```
-
 
 * DELETE /api/events/delete:
   Endpoint to update an event from database
+
 ```javascript
 const myHeaders = new Headers();
 myHeaders.append("Authorization", "your_token");
@@ -373,9 +367,7 @@ fetch("http://localhost:8080/api/events/delete?id=ID_DEL_EVENTO", requestOptions
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
 ```
-
 
 * POST /api/guests/create:
   Endpoint to create a new guest to database
@@ -405,13 +397,12 @@ fetch("http://localhost:8080/api/guests/create", requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
 ```
 
 * GET /api/guests:
   Endpoint to get all guest on database
-```javascript
 
+```javascript
 const requestOptions = {
     method: "GET",
     headers: {
@@ -425,11 +416,11 @@ fetch("http://localhost:8080/api/guests", requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
 ```
 
 * GET /api/guests/get?id=<id_user>:
   Endpoint to get a guest from database
+
 ```javascript
 const requestOptions = {
     method: "GET",
@@ -444,12 +435,11 @@ fetch("http://localhost:8080/api/guests/get?id=ID_DEL_INVITADO", requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
-
 ```
 
 * GET /api/guests/update:
   Endpoint to update an guest from database
+
 ```javascript
 const myHeaders = new Headers();
 myHeaders.append("Authorization", "tu_token_de_autorización");
@@ -476,8 +466,6 @@ fetch("http://localhost:8080/api/guests/update", requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
-
 ```
 
 * DELETE /api/guests/delete:
@@ -499,9 +487,9 @@ fetch("http://localhost:8080/api/guests/delete?id=ID_DEL_INVITADO", requestOptio
     .catch(error => console.error('Error:', error));
 ```
 
-
 * POST /api/invite-requests/create:
   Endpoint to create a new invite-requests to database
+
 ```javascript
 const myHeaders = new Headers();
 myHeaders.append("Authorization", "tu_token_de_autorización");
@@ -532,12 +520,11 @@ fetch("http://localhost:8080/api/invite-requests/create", requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
 ```
-
 
 * GET /api/invite-requests:
   Endpoint to get all invite-requests on database
+
 ```javascript
 const requestOptions = {
     method: "GET",
@@ -552,10 +539,11 @@ fetch("http://localhost:8080/api/invite-requests", requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
 ```
+
 * GET /api/invite-requests/get?id=<id_user>:
   Endpoint to get a invite-requests from database
+
 ```javascript
 const requestOptions = {
     method: "GET",
@@ -570,10 +558,11 @@ fetch("http://localhost:8080/api/invite-requests/get?id=ID_DE_LA_SOLICITUD", req
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
 ```
+
 * GET /api/invite-requests/update:
   Endpoint to update an invite-requests from database
+
 ```javascript
 const myHeaders = new Headers();
 myHeaders.append("Authorization", "tu_token_de_autorización");
@@ -605,10 +594,11 @@ fetch("http://localhost:8080/api/invite-requests/update", requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
 ```
+
 * DELETE /api/invite-requests/delete:
   Endpoint to update an invite-requests from database
+
 ```javascript
 const myHeaders = new Headers();
 myHeaders.append("Authorization", "tu_token_de_autorización");
@@ -623,9 +613,7 @@ fetch("http://localhost:8080/api/invite-requests/delete?id=ID_DE_LA_SOLICITUD", 
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.error('Error:', error));
-
 ```
-
 
 ```javascript 
 const myHeaders = new Headers();
@@ -645,8 +633,6 @@ fetch("http://localhost:8080/api/users/delete?id=936a4103-2352-4480-86fb-d51386b
     .then((result) => console.log(result))
     .catch((error) => console.error(error));
 ```
-
-
 
 ### Response Standardized example
 
@@ -676,7 +662,6 @@ fetch("http://localhost:8080/api/users/delete?id=936a4103-2352-4480-86fb-d51386b
   "success": true,
   "message": "OK"
 }
-
 ```
 
 *Error Response Example*
@@ -713,7 +698,6 @@ request-invitation. By
 following the provided instructions, you can easily set up and utilize the API Gateway to perform various operations.
 
 <hr>
-
 
 <p align="center">
     <img src="https://www.kingtide.com/_next/static/media/logo.1fa4aea8.svg" width="100" title="hover text">
